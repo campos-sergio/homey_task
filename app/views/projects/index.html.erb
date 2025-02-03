@@ -1,0 +1,32 @@
+<% content_for :title, "Projects" %>
+
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <h1 class="font-extrabold text-4xl text-black">
+      Projects
+    </h1>
+  </div>
+  <% if @projects.any? %>
+    <% @projects.each do |project| %>
+      <div class="min-w-full text-black">
+        <div id="<%= dom_id project %>" class="shadow rounded-lg px-5 py-3 my-4">
+          <p>
+            <strong class="text-lg font-bold mb-1">
+              Name:
+            </strong>
+            <%= project.name %>
+          </p>
+          <p>
+            <%= link_to "Details", project %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="shadow rounded-lg px-8 py-5 my-4 text-black">
+      <p class="text-4xl font-extrabold my-4">
+        No projects available yet.
+      </p>
+    </div>
+  <% end %>
+</div>

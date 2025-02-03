@@ -1,0 +1,81 @@
+<% content_for :title, "Project details" %>
+
+<div class="min-w-full">
+  <% if flash[:alert] %>
+    <p class="py-2 px-3 bg-red-900 mb-5 text-red-300 font-medium rounded-lg">
+      <%= flash[:alert] %>
+    </p>
+  <% end %>
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-900 mb-5 text-green-300 font-medium rounded-lg">
+      <%= notice %>
+    </p>
+  <% end %>
+  <%#= render partial: "projects/project", locals: { project: @project, comment: @comment } %>
+  <h3 class="text-4xl font-extrabold my-4 text-black">
+    Project details
+  </h3>
+  <div class="shadow rounded-lg px-8 py-5 my-4 text-black">
+    <p>
+      <strong>Name:</strong> <%= @project.name %>
+    </p>
+    <p>
+      <strong>Status:</strong> <%= @project.status %>
+    </p>
+    <% if authenticated? %>
+      <%= form_with(model: @project, class: "contents text-black") do |form| %>
+        <div class="field">
+          <%= form.select :status,
+                Project::STATUSES,
+                selected: @project.status,
+                class: "rounded-md px-3 py-2 mt-2 w-full" %>
+          <% if @project.errors[:status].any? %>
+            <p class="text-red-500">
+              <%= @user.errors.full_messages_for(:status).join(", ") %>
+            </p>
+          <% end %>
+        </div>
+        <div class="inline">
+          <%= form.submit "Save",
+                class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <h3 class="text-4xl font-extrabold my-4 text-black">
+    Comments
+  </h3>
+  <% if authenticated? %>
+      <%= form_with model: [@project, @comment],
+            url: project_comments_path(@project),
+            data: { controller: "reset-form", action: "turbo:submit-end->reset-form#reset" },
+            class: "contents text-black" do |form| %>
+        <div class="field">
+          <%= form.text_area :message,
+                placeholder: "Send your comment...",
+                class: "block shadow-sm rounded-md border border-gray-400 focus:outline-blue-600 px-3 py-2 mt-2 w-full" %>
+          <% if @comment.errors[:message].any? %>
+            <p class="text-red-500">
+              <%= @comment.errors.full_messages_for(:message).join(", ") %>
+            </p>
+          <% end %>
+        </div>
+        <div class="inline">
+          <%= form.submit "Send",
+                class: "rounded-lg py-3 px-5 bg-blue-700 text-white inline-block font-medium cursor-pointer hover:bg-blue-600" %>
+        </div>
+      <% end %>
+  <% end %>
+  <div class="shadow rounded-lg px-8 py-5 my-4 text-black">
+    <% if @project.comments.any? %>
+      <div id="comments">
+        <%= turbo_stream_from @project, "comments" %><!-- solid_cable magic o/ -->
+        <%= render @project.comments.order(created_at: :desc) %><!-- solid_cable magic o/ -->
+      </div>
+    <% else %>
+      <p>
+        No comments available yet.
+      </p>
+    <% end %>
+  </div>
+</div>
