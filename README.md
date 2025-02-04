@@ -4,6 +4,8 @@
 
 * **FYI:** The feature is using the new Ruby on Rails 8 solid cable magic because it is easier to setup, faster to develop and cheaper to maintain.
 
+* Demo available at https://homey-task-qxdu.onrender.com
+
 * Find me at https://www.linkedin.com/in/campos-sergio-programmer
 
 ## Running the project locally

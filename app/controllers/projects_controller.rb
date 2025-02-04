@@ -12,6 +12,18 @@ class ProjectsController < ApplicationController
   def edit
   end
 
+  def create
+    @projects = Project.order(created_at: :desc)
+    project = Project.new(name: project_params[:name], status: "Pending")
+
+    if project.save
+      redirect_to projects_path, notice: "Project created successfully."
+    else
+      flash.now[:project_errors] = project.errors.full_messages.join(", ")
+      render "projects/index", status: :unprocessable_entity
+    end
+  end
+
   def update
     @project.comments.build(
       user: Current.user,
@@ -33,6 +45,6 @@ class ProjectsController < ApplicationController
     end
 
     def project_params
-      params.expect(project: [ :status ])
+      params.expect(project: [ :name, :status ])
     end
 end
