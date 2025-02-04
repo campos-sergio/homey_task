@@ -10,11 +10,10 @@ class Comment < ApplicationRecord
 
   private
     def notify_project
-      broadcast_append_to(
-        [ project, :comments ],
-        target: :comments,
+      broadcast_append_to self.project,
+        "comments",
+        target: "comments",
         partial: "comments/comment",
         locals: { comment: self }
-      )
     end
 end
