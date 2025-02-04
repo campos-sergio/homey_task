@@ -10,7 +10,7 @@ class Comment < ApplicationRecord
 
   private
     def notify_project
-      broadcast_prepend_to(
+      broadcast_append_to(
         [ project, :comments ],
         target: :comments,
         partial: "comments/comment",

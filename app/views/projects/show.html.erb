@@ -70,9 +70,7 @@
   <div class="shadow rounded-lg px-8 py-5 my-4 text-black">
     <% if @project.comments.any? %>
       <div id="comments">
-        <% @project.comments.order(created_at: :desc).each do |comment| %>
-          <%= render "comments/comment", comment: comment %>
-        <% end %>
+        <%= render @project.comments %>
       </div>
     <% else %>
       <p>
