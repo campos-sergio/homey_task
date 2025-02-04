@@ -1,7 +1,5 @@
 <% content_for :title, "Project details" %>
 
-<%= turbo_stream_from @project, "comments" %><!-- solid_cable magic o/ -->
-
 <div class="min-w-full">
   <% if flash[:alert] %>
     <p class="py-2 px-3 bg-red-900 mb-5 text-red-300 font-medium rounded-lg">
