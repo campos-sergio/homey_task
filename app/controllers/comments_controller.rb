@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   def create
     @project = Project.find(params[:project_id])
-    @comment = @project.comments.build(user: Current.user, message: comment_params[:message])
+    @comment = Comment.new(project_id: @project.id, user_id: Current.user.id, message: comment_params[:message])
     if @comment.save
       render json: {}, status: :no_content # solid_cable friendly response o/
     else
