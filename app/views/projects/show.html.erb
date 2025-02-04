@@ -1,5 +1,7 @@
 <% content_for :title, "Project details" %>
 
+<%= turbo_stream_from @project, "comments" %><!-- solid_cable magic o/ -->
+
 <div class="min-w-full">
   <% if flash[:alert] %>
     <p class="py-2 px-3 bg-red-900 mb-5 text-red-300 font-medium rounded-lg">
@@ -68,8 +70,9 @@
   <div class="shadow rounded-lg px-8 py-5 my-4 text-black">
     <% if @project.comments.any? %>
       <div id="comments">
-        <%= turbo_stream_from @project, "comments" %><!-- solid_cable magic o/ -->
-        <%= render @project.comments.order(created_at: :desc) %><!-- solid_cable magic o/ -->
+        <% @project.comments.order(created_at: :desc).each do |comment| %>
+          <%= render "comments/comment", comment: comment %>
+        <% end %>
       </div>
     <% else %>
       <p>
